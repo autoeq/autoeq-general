@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/AutoEQ/pictures">
+        <file>Resources/autoeq.png</file>
+    </qresource>
+</RCC>
