@@ -54,10 +54,15 @@ void MainWindow::on_actionAbout_Qt_triggered()
 
 void MainWindow::on_actionLoad_triggered()
 {
-    QFileDialog dialog = new QFileDialog(this, tr("Load a file to equalise..."), QDir::homePath(), tr("Audio files, *.wav, *.ogg, *.flac, *.aiff, *.mfa"));
+    QFileDialog dialog(this);
+    QAudioDeviceInfo audioDeviceInfo;
+    dialog.setFileMode(QFileDialog::ExistingFiles); // Fix this, for lord's sake
+    dialog.setDirectory(QDir::homePath());
+    dialog.setNameFilter(audioDeviceInfo.supportedCodecs().join(","));
+    dialog.setWindowTitle("Select an audio file...");
     if (dialog.exec())
     {
-        fileNames = dialog.selectedFiles();
+        fileNames = static_cast<QStringList>(dialog.selectedFiles().join(""));
         if (fileNames.length() > 1)
         {
             QMessageBox *box = new QMessageBox(this);

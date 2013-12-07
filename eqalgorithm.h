@@ -35,11 +35,11 @@ namespace AutoEQ {
             EQAlgorithm();
             ~EQAlgorithm();
         private:
-            fftw_execute execute();
+            void execute();
             void gatherData();
             fftw_plan p;
             fftw_complex *in, *out;
-            QAudioInput *input;
+            QAudioFormat format;
             AnalysingDialog *analyse;
             QFile file;
             QByteArray fftInput;

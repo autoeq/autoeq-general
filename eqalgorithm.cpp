@@ -21,7 +21,6 @@ using namespace AutoEQ;
 
 EQAlgorithm::EQAlgorithm()
 {
-    this->input = NULL;
     this->in = NULL;
     this->out = NULL;
 }
@@ -39,17 +38,18 @@ void EQAlgorithm::gatherData()
     this->file.open(QIODevice::ReadWrite);
     this->fftInput = file.readAll();
     this->file.close();
-    this->fftOutput = new QAudioBuffer(fftInput, QAudioFormat::codec(), 0)
+    QAudioFormat format;
+    this->fftOutput = new QAudioBuffer(fftInput, format.codec(), 0);
 }
 
-fftw_execute EQAlgorithm::execute()
+void EQAlgorithm::execute()
 {
     if (this->in || this->out != NULL)
     {
         return;
     }
-    this->in = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * );
-    this->out = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * 441000);
-    this->p = fftw_plan_dft_1d(441000, in, out, FFTW_FORWARD, FFTW_ESTIMATE);
-    return fftw_execute(this->p);
+    this->in = this->fftInput.toDouble(), (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * 44100);
+    this->out = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * 44100);
+    this->p = fftw_plan_dft_1d(format.sampleRate(), in, out, FFTW_FORWARD, FFTW_ESTIMATE);
+    fftw_execute(this->p);
 }
